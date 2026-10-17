@@ -30,7 +30,8 @@
 Группа: ЭФБО-14-25
 
 ## Текущий статус
-Создана базовая структура проекта.
+
+Создан многостраничный сайт (главная, каталог, контакты). CSS-классы приведены к методологии БЭМ.
 
 ## Ссылка на опубликованный проект
 
@@ -54,7 +55,6 @@ GitHub Pages: https://bladyjerk.github.io/kr1-html-css-shop/
 - внешний CSS-файл;
 - базовую навигацию;
 - оформление основных блоков страницы.
-Также добавьте в историю выполнения:
 
 ## История выполнения
 
@@ -63,6 +63,8 @@ GitHub Pages: https://bladyjerk.github.io/kr1-html-css-shop/
 - Практическая работа 3: добавлена форма заявки, модальное окно и базовая валидация.
 - Практическая работа 4: добавлены CSS-переменные, состояния интерфейса и упорядочена структура стилей.
 - Практическая работа 5: создана многостраничная структура сайта, добавлены единая навигация и якорные ссылки.
+- Практическая работа 6: добавлены Flexbox-навигация и Grid-раскладка карточек и каталога.
+- Практическая работа 7: выполнен рефакторинг CSS-стилей по методологии БЭМ.
 
 ## Реализованные элементы интерфейса
 
@@ -81,7 +83,7 @@ GitHub Pages: https://bladyjerk.github.io/kr1-html-css-shop/
 - единая шкала отступов;
 - переменные для цветов и скруглений;
 - состояния `:hover`, `:focus-visible`, `:disabled`;
-- визуальная подсветка ошибочных полей через `aria-invalid`;
+- визуальная подсветка ошибочных полей через `aria-invalid` и БЭМ-модификатор `order-form__input--error`;
 - структурированный файл `css/style.css`.
 
 ## Flexbox
@@ -117,18 +119,68 @@ GitHub Pages: https://bladyjerk.github.io/kr1-html-css-shop/
 - `border-bottom` для визуального отделения шапки от содержимого;
 - сохранение естественного положения шапки при загрузке страницы.
 
-## Методология БЭМ
+## БЭМ-структура проекта
 
-В проекте используются:
+В проекте используются следующие БЭМ-блоки:
 
-- блоки: `.header`, `.nav`, `.product-card`, `.form-field`, `.footer`;
-- элементы: `.nav__list`, `.nav__item`, `.nav__link`, `.product-card__title`, `.form-field__input`;
-- модификаторы: `.form-field--checkbox`, `.section--products`, `.button--secondary`;
-- разделение ответственности между блоком и его элементами;
-- независимость блоков для переиспользования в разных частях страницы;
-- низкая специфичность селекторов для предсказуемости стилей.
+- `site-header` — шапка сайта;
+- `site-nav` — основная навигация;
+- `breadcrumbs` — хлебные крошки;
+- `hero` — первый экран главной страницы;
+- `section` — универсальный раздел страницы;
+- `advantages-list` — список преимуществ;
+- `info-block` — информационный блок;
+- `contacts-list` — список контактов;
+- `products-grid` — сетка товаров;
+- `product-card` — карточка товара;
+- `catalog-layout` — структура страницы каталога;
+- `catalog-filters` — фильтры каталога;
+- `order-dialog` — модальное окно заявки;
+- `order-form` — форма заявки;
+- `success-message` — сообщение об успешной отправке;
+- `button` — кнопка;
+- `site-footer` — подвал сайта.
+
+Примеры элементов (`block__element`):
+
+- `site-nav__list`, `site-nav__item`, `site-nav__link`;
+- `product-card__title`, `product-card__description`, `product-card__price`, `product-card__button`;
+- `order-form__field`, `order-form__label`, `order-form__input`, `order-form__actions`;
+- `breadcrumbs__link`, `breadcrumbs__current`.
+
+Примеры модификаторов (`block--modifier`, `block__element--modifier`):
+
+- `site-nav__link--active` — активный пункт меню;
+- `product-card--featured` — выделенная карточка;
+- `product-card--discount` — карточка товара со скидкой;
+- `button--primary`, `button--secondary`, `button--disabled` — варианты кнопки;
+- `order-form__input--error` — поле с ошибкой.
+
+### Аудит классов (ПР №7)
+
+| Было | Стало |
+| --- | --- |
+| `header`, `header__container`, `logo` | `site-header`, `site-header__inner`, `site-header__logo` |
+| `nav`, `nav__list`, `nav__item`, `nav__link` | `site-nav`, `site-nav__list`, `site-nav__item`, `site-nav__link` |
+| `footer`, `footer__container` | `site-footer`, `site-footer__inner` |
+| `product-grid` | `products-grid` |
+| `form-field`, `form-field__*` | `order-form__field`, `order-form__*` |
+| `form-actions`, `form-actions__button` | `order-form__actions`, `order-form__button` |
+| `.breadcrumbs a`, `.breadcrumbs span` | `breadcrumbs__link`, `breadcrumbs__current` |
+| `.catalog-filters h2`, `.filters-form fieldset/legend/label` | `catalog-filters__title`, `catalog-filters__group`, `__legend`, `__label` |
+| `price-inputs`, `.price-inputs input` | `catalog-filters__price`, `catalog-filters__input` |
+| `catalog-products` + чужой `section__title` | `catalog-layout__content`, `catalog-layout__title` |
+| стили по тегам `header`, `main`, `footer` | классы `site-header`, `page-content`, `site-footer` |
+| `section--products` (модификатор без стилей) | удалён |
+
+Принципы:
+
+- стили задаются только через классы, id используются лишь для якорей и JavaScript;
+- inline-стилей нет;
+- вложенные селекторы оставлены только для модификаторов (`.product-card--discount .product-card__price`);
+- значения оформления берутся из CSS-переменных.
 
 ## Дополнительные элементы
 
 - `sitemap.xml` — простая карта сайта;
-- Open Graph-теги — базовая разметка для отображения ссылок.
+- Open Graph-теги — базовая разметка для отображения ссылок.
